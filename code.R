@@ -149,8 +149,7 @@ dev.off()
 cpg.annotate.pvalue<- function(datatype = c("array", "sequencing"), object, annotation = c(array = "IlluminaHumanMethylation450k",
     annotation = "ilmn12.hg19"), analysis.type = c("differential",
     "variability"), design, contrasts = FALSE, cont.matrix = NULL,
-    fdr = 0.05, coef, ...)
-{ 
+    fdr = 0.05, coef, ...){ 
     if (datatype == "array") {
         stopifnot(is.matrix(object))
         analysis.type <- match.arg(analysis.type)
