@@ -17,7 +17,7 @@ data = read.table(file="DataNormalized.txt", header=TRUE, sep="\t")
 etiquetas = read.table(file="etiquetas.txt", header=TRUE)
 sampleInfo = data.table::fread(file="SamplesR.txt", header=TRUE)
 
-sampleInfoexpresion = data.table::fread(file="../../Expresion/ComparacionesMetilacion-Expresion.csv",sep=",",header=T)
+sampleInfoexpresion = data.table::fread(file="ComparacionesMetilacion-Expresion.csv",sep=",",header=T)
 sampleInfoexpresion<-merge(sampleInfoexpresion,sampleInfo,by.x=c("ID Expresion"),by.y=c("Expediente"))
 
 

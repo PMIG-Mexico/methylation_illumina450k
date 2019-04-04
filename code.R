@@ -13,9 +13,9 @@ library(DMRcate)
 library(stringr)
 library(wateRmelon)
 
-targets<-reads.csv("Samples.csv")
-targets_21mayo<-read.csv("Sample_Sheet-21Mayo.csv")
-targets_21mayo<-targets_21mayo[match(targets$Sample_Name.1,targets_21mayo$Sample_Name),]
+targets<-read.csv("Samples.csv")
+#targets_21mayo<-read.csv("Sample_Sheet-21Mayo.csv")
+#targets_21mayo<-targets_21mayo[match(targets$Sample_Name.1,targets_21mayo$Sample_Name),]
 
 rgSet <- read.metharray.exp(targets=targets)
 
@@ -111,7 +111,7 @@ mSetSqFlt <- mSetSq[keep,]
 
 mSetSqFlt <- dropLociWithSnps(mSetSqFlt)
 
-xReactiveProbes <- read.csv(file="48639-non-specific-probes-Illumina450k.csv")
+xReactiveProbes <- read.csv(file="~/Downloads/illumina450k_filtering-master/48639-non-specific-probes-Illumina450k.csv")
 keep <- !(featureNames(mSetSqFlt) %in% xReactiveProbes$TargetID)
 table(keep)
 
@@ -233,8 +233,8 @@ message("Error: datatype must be one of 'array' or 'sequencing'")
 } 
 
 contraste <- "Suicida-Control"
-casos <- targets_new$Condicion=="Suicida"
-control <-targets_new$Condicion=="Control"
+casos <- targets$Condicion=="Suicida"
+control <-targets$Condicion=="Control"
 data_matrix <- bVals
 
 design_matrix<-matrix(0,dim(data_matrix)[2],2)
@@ -252,14 +252,14 @@ fit2 <- contrasts.fit(fit, contMatrix)
 fit2 <- eBayes(fit2)
 # look at the numbers of DM CpGs at FDR < 0.05
 print(summary(decideTests(fit2)))
-DMPs <- topTable(fit2, num=Inf, coef=1, genelist=ann450kSub)
+DMPs <- topTable(fit2, num=Inf, coef=1, genelist=ann450kSub,adjust.method = "fdr")
 
+head(DMPs)
 
-
-myAnnotation <- cpg.annotate.pvalue(object = bVals, datatype = "array", what = "Beta",
- analysis.type = "differential", design = design,
+myAnnotation <- cpg.annotate(object = bVals, datatype = "array", what = "Beta",
+ analysis.type = "differential", design = design_matrix,
  contrasts = TRUE, cont.matrix = contMatrix,
- coef = "Suicida-Control", arraytype = "450K",fdr=0.00005)
+ coef = "Suicida-Control", arraytype = "450K",fdr=0.1)
 
 
 
