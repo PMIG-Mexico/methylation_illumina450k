@@ -44,14 +44,24 @@ champ.SVD(beta= combat_a_b1, rgSet= myLoad$rgSet, pd= myLoad$pd, resultsDir = ".
 #findingDMPs
 myDMP=champ.DMP(beta=combat_a_b1, arraytype="450K")
 
-myDMR=champ.DMR(beta=combat_a_b1,pheno=myLoad$pd$Sample_Group,arraytype="450K",method = "Bumphunter",minProbes=7, adjPvalDmr= 0.1, cores=4, smooth=TRUE, useWeights=FALSE,permutations=NULL,B=1000, nullMethod="bootstrap",meanLassoRadius=375,minDmrSep=1000,minDmrSize=50,adjPvalProbe=0.05,Rplot=T,PDFplot=T,resultsDir="./CHAMP_ProbeLasso/")
-#plot DMRcate  results
+#Finding DMRs
+myDMR=champ.DMR(beta=combat_a_b1,pheno=myLoad$pd$Sample_Group,arraytype="450K",method = "Bumphunter",minProbes=7, adjPvalDmr= 0.1, cores=2, smooth=TRUE, useWeights=FALSE,permutations=NULL,B=1000, nullMethod="bootstrap",meanLassoRadius=375,minDmrSep=1000,minDmrSize=50,adjPvalProbe=0.05,Rplot=T,PDFplot=T,resultsDir="./CHAMP_ProbeLasso/")
+DMR=myDMR$BumphunterDMR
+DMR$seqnames <- as.factor(substr(DMR$seqnames, 
+                                 4, 100))
+index <- apply(DMR, 1, function(x) which(probe.features$CHR == 
+                                           x[1] & probe.features$MAPINFO >= as.numeric(x[2]) & probe.features$MAPINFO <= 
+                                           as.numeric(x[3])))
+Anno <- data.frame(DMRindex = unname(unlist(sapply(names(index), 
+                                                   function(x) rep(x, length(index[[x]]))))), probe.features[do.call(c, 
+                                                                                                                     index), 1:8])
 
-DMR.plot(ranges, dmr, CpGs, what=c("Beta", "M"),
-         arraytype=c("EPIC"), phen.col,
-         genome = c("hg19"),
-         samps = NULL, ...)
-write.csv(myDMPs, "myDMPS_0.1_BH_second")
+
+#DMR.plot(ranges, dmr, CpGs, what=c("Beta", "M"),
+#         arraytype=c("EPIC"), phen.col,
+#         genome = c("hg19"),
+#         samps = NULL, ...)
+#write.csv(myDMPs, "myDMPS_0.1_BH_second")
 
 
 write.csv(myDMRS_saas, "myDMRS_saas")
