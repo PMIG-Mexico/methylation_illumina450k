@@ -45,6 +45,8 @@ champ.SVD(beta= combat_a_b1, rgSet= myLoad$rgSet, pd= myLoad$pd, resultsDir = ".
 myDMP=champ.DMP(beta=combat_a_b1, arraytype="450K")
 
 #Finding DMRs
+DMRsimple=champ.DMR(beta=combat_a_b1,pheno=myLoad$pd$Sample_Group)
+
 myDMR=champ.DMR(beta=combat_a_b1,pheno=myLoad$pd$Sample_Group,arraytype="450K",method = "Bumphunter",minProbes=7, adjPvalDmr= 0.1, cores=2, smooth=TRUE, useWeights=FALSE,permutations=NULL,B=1000, nullMethod="bootstrap",meanLassoRadius=375,minDmrSep=1000,minDmrSize=50,adjPvalProbe=0.05,Rplot=T,PDFplot=T,resultsDir="./CHAMP_ProbeLasso/")
 DMR=myDMR$BumphunterDMR
 DMR$seqnames <- as.factor(substr(DMR$seqnames, 

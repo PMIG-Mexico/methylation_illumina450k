@@ -3,7 +3,7 @@
 # microarreglos de expresión Illumina
 # Claudia Rangel Escareño
 # Genómica Computacional 4 Agosto 2017
-# Ultima modificación: 27 Agosto 2017 
+# Ultima modificación: 4 Abril 2019 
 # ==============================================================
 
 library(affy) 
