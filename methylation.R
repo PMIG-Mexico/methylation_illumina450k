@@ -57,7 +57,14 @@ index <- apply(DMR, 1, function(x) which(probe.features$CHR ==
 Anno <- data.frame(DMRindex = unname(unlist(sapply(names(index), 
                                                    function(x) rep(x, length(index[[x]]))))), probe.features[do.call(c, 
                                                                                                                      index), 1:8])
+finalconcat<-c()
+for(i in strsplit(DMRsimple$DMRcateDMR$overlapping.promoters,", ")){
+  concat<-c()
+  for(j in strsplit(i,"-")){concat<-c(concat,j[1])}
+  finalconcat<-c(finalconcat,paste(concat,sep=","))
+}
 
+DMRsimple$DMRcateDMR$promoters=finalconcat
 
 #DMR.plot(ranges, dmr, CpGs, what=c("Beta", "M"),
 #         arraytype=c("EPIC"), phen.col,
