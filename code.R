@@ -417,3 +417,16 @@ p.cell<-ggplot(aes(x=variable,y=value,fill=Tpsic),data=df.cell)+
 print(p.cell+labs(colour = "Psychiatric conditions", x="Cell type"))
 
 dev.off()
+
+RR<-as.data.frame(results.ranges)
+RR$DMRID <-rownames(RR)
+row.names(RR) = NULL
+RR$DMRNO <- rownames (RR)
+row.names(RR) = RR$DMRID
+RR$DMRID = NULL
+RR <-RR[order(RR$minfdr), , drop = FALSE]
+head(RR)
+cgID<-as.data.frame(DMRs$input)
+for(i in 1:nrow(RR)){cromosoma=RR$seqnames[i];minimo=RR$start[i];maximo=RR$end[i]; idx<-(as.character(cgID$CHR)==as.character(cromosoma) & (cgID$pos >= minimo & cgID$pos <= maximo));cgID[idx,"DMR_NUMBER"]<-RR$DMRNO[i]}
+write.csv(cgID,file="cgID.csv")
+write.csv(RR,file="Regions.csv")
