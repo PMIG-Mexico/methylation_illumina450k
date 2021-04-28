@@ -32,7 +32,8 @@ dim(data)
 # Seleccionamos sólo aquellos genes cuyo p-value<0.5    
 # de un total de 34656 tenemos p.values<.5 -> 27453
 # ---------------------------------------------------
-pval.ind = 55:104
+#pval.ind = 55:104
+pval.ind = seq(3,to=135,by=2)
 pvalues = data[,pval.ind]
 pvalues.avg = apply(pvalues,1,mean)
 hist(pvalues.avg, col="steelblue", main="Histogram of p-values<0.5")
@@ -47,7 +48,15 @@ sum(pvalues.avg<.5)
 indx.rowpval = which(pvalues.avg<.5)
 entID = data[indx.rowpval,"ENTREZ_GENE_ID"]
 sym = data[indx.rowpval,1]
-exp.matrix = data[indx.rowpval,-55:-104]
+
+ind=as.vector(sampleInfoexpresion[,"ID Metilacion"]!="-")
+sampleInfoexpresion=sampleInfoexpresion[ind,]
+
+ref=paste0("X",sampleInfoexpresion$Chip_ID,".AVG_Signal")
+
+
+exp.matrix = data[indx.rowpval, match(ref,colnames(data))]
+
 colnames(exp.matrix) = as.character(sampleInfoexpresion$Etiqueta)
 rownames(exp.matrix) = sym
 
